@@ -1,4 +1,5 @@
 from flask import g
+from flask.views import MethodView
 from flask_smorest import Blueprint
 from ..models import db, ProcessingJob
 from ..schemas import JobResponseSchema
@@ -8,7 +9,7 @@ blp = Blueprint("Jobs", "jobs", url_prefix="/jobs", description="Processing jobs
 
 
 @blp.route("")
-class JobsListResource:
+class JobsListResource(MethodView):
     @blp.response(200, JobResponseSchema(many=True))
     @require_auth
     def get(self):
@@ -22,7 +23,7 @@ class JobsListResource:
 
 
 @blp.route("/<int:job_id>")
-class JobDetailResource:
+class JobDetailResource(MethodView):
     @blp.response(200, JobResponseSchema)
     @require_auth
     def get(self, job_id: int):

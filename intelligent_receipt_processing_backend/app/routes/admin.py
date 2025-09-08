@@ -1,4 +1,5 @@
 from flask import g
+from flask.views import MethodView
 from flask_smorest import Blueprint, abort
 from ..models import db, ProcessingJob, Document
 from ..schemas import JobResponseSchema, DocumentResponseSchema
@@ -13,7 +14,7 @@ def require_admin():
 
 
 @blp.route("/jobs")
-class AdminJobsResource:
+class AdminJobsResource(MethodView):
     @blp.response(200, JobResponseSchema(many=True))
     @require_auth
     def get(self):
@@ -26,7 +27,7 @@ class AdminJobsResource:
 
 
 @blp.route("/documents")
-class AdminDocumentsResource:
+class AdminDocumentsResource(MethodView):
     @blp.response(200, DocumentResponseSchema(many=True))
     @require_auth
     def get(self):

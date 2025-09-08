@@ -2,6 +2,7 @@ from functools import wraps
 from typing import Optional
 
 from flask import request, g
+from flask.views import MethodView
 from flask_smorest import Blueprint, abort
 from sqlalchemy import func
 
@@ -39,7 +40,7 @@ def require_auth(fn):
 
 
 @blp.route("/register")
-class RegisterResource:
+class RegisterResource(MethodView):
     @blp.arguments(UserRegisterSchema, location="json")
     @blp.response(201, TokenSchema)
     def post(self, json_data):
@@ -58,7 +59,7 @@ class RegisterResource:
 
 
 @blp.route("/login")
-class LoginResource:
+class LoginResource(MethodView):
     @blp.arguments(UserLoginSchema, location="json")
     @blp.response(200, TokenSchema)
     def post(self, json_data):

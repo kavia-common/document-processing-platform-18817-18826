@@ -1,4 +1,5 @@
 from flask import request, g
+from flask.views import MethodView
 from flask_smorest import Blueprint
 from ..schemas import DocumentResponseSchema
 from .auth import require_auth
@@ -8,7 +9,7 @@ blp = Blueprint("Search", "search", url_prefix="/search", description="Search do
 
 
 @blp.route("")
-class SearchResource:
+class SearchResource(MethodView):
     @blp.response(200, DocumentResponseSchema(many=True))
     @require_auth
     def get(self):

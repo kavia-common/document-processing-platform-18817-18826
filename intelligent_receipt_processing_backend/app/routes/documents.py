@@ -2,6 +2,7 @@ import mimetypes
 import os
 
 from flask import request, g, send_file
+from flask.views import MethodView
 from flask_smorest import Blueprint, abort
 from werkzeug.datastructures import FileStorage
 
@@ -15,7 +16,7 @@ blp = Blueprint("Documents", "documents", url_prefix="/documents", description="
 
 
 @blp.route("")
-class DocumentListResource:
+class DocumentListResource(MethodView):
     @blp.response(200, DocumentResponseSchema(many=True))
     @require_auth
     def get(self):
@@ -84,7 +85,7 @@ class DocumentListResource:
 
 
 @blp.route("/<int:doc_id>")
-class DocumentDetailResource:
+class DocumentDetailResource(MethodView):
     @blp.response(200, DocumentResponseSchema)
     @require_auth
     def get(self, doc_id: int):
@@ -111,7 +112,7 @@ class DocumentDetailResource:
 
 
 @blp.route("/<int:doc_id>/download")
-class DocumentDownloadResource:
+class DocumentDownloadResource(MethodView):
     @require_auth
     def get(self, doc_id: int):
         """
@@ -135,7 +136,7 @@ class DocumentDownloadResource:
 
 
 @blp.route("/<int:doc_id>/versions")
-class DocumentVersionListResource:
+class DocumentVersionListResource(MethodView):
     @blp.response(200, DocumentVersionResponseSchema(many=True))
     @require_auth
     def get(self, doc_id: int):
