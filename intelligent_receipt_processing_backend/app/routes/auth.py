@@ -22,7 +22,11 @@ def _get_token_from_header() -> Optional[str]:
 
 # PUBLIC_INTERFACE
 def require_auth(fn):
-    """Decorator that requires a valid Bearer token, sets g.current_user."""
+    """Decorator that requires a valid Bearer token, sets g.current_user.
+
+    Expects Authorization: Bearer <token> header.
+    Token is generated via utils.create_access_token and validated via utils.decode_access_token.
+    """
     @wraps(fn)
     def wrapper(*args, **kwargs):
         token = _get_token_from_header()

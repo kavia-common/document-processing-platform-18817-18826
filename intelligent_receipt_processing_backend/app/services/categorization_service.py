@@ -8,7 +8,15 @@ class CategorizationService:
 
     # PUBLIC_INTERFACE
     def categorize(self, title: str, ocr_text: str) -> Optional[str]:
-        """Return a category label from the content/title."""
+        """Return a category label from the content/title.
+
+        Parameters:
+        - title: Document title string.
+        - ocr_text: Extracted OCR text from the document.
+
+        Returns:
+        - Optional[str]: Category label (e.g., invoice, receipt, tax, legal, uncategorized).
+        """
         text = f"{title} {ocr_text}".lower()
         if any(k in text for k in ["invoice", "billed", "amount due"]):
             return "invoice"

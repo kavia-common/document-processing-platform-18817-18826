@@ -37,6 +37,24 @@ Environment variables (see .env.example):
 - DB_POOL_SIZE
 - DB_MAX_OVERFLOW
 
+Database configuration:
+- For MySQL, set MYSQL_SQLALCHEMY_URL to: mysql+pymysql://USER:PASSWORD@HOST:PORT/DBNAME
+- If MYSQL_SQLALCHEMY_URL is blank or unset, the app falls back to SQLite at instance/local.db for development.
+- For CI/testing, set FLASK_ENV=test and optionally TEST_MYSQL_SQLALCHEMY_URL.
+
+Quick API test flow:
+1) Register user:
+   curl -s -X POST http://localhost:3001/auth/register -H "Content-Type: application/json" -d '{"email":"user@example.com","password":"secret","name":"User"}'
+   -> returns {"access_token": "..."}
+2) Login (if user exists):
+   curl -s -X POST http://localhost:3001/auth/login -H "Content-Type: application/json" -d '{"email":"user@example.com","password":"secret"}'
+3) List documents:
+   curl -s -H "Authorization: Bearer <token>" http://localhost:3001/documents
+4) Upload document:
+   curl -s -X POST -H "Authorization: Bearer <token>" -F "title=Test Doc" -F "file=@/path/to/file.pdf" http://localhost:3001/documents
+5) Check jobs:
+   curl -s -H "Authorization: Bearer <token>" http://localhost:3001/jobs
+
 API overview:
 - GET / -> Health
 - POST /auth/register, POST /auth/login

@@ -10,7 +10,19 @@ class SearchService:
 
     # PUBLIC_INTERFACE
     def search_documents(self, user_id: int, query: Optional[str] = None, category: Optional[str] = None, tag: Optional[str] = None, limit: int = 25, offset: int = 0) -> List[Document]:
-        """Search documents belonging to a user with optional filters."""
+        """Search documents belonging to a user with optional filters.
+
+        Parameters:
+        - user_id: Owner user id to scope the search.
+        - query: Full-text-like search over title, category, tags, and OCR text.
+        - category: Exact match on document.category.
+        - tag: Substring match against the comma-separated tags field.
+        - limit: Max items to return.
+        - offset: Offset for pagination.
+
+        Returns:
+        - List[Document]: Documents matching the criteria.
+        """
         q = db.session.query(Document).join(DocumentVersion, isouter=True).filter(Document.created_by_id == user_id)
 
         if query:

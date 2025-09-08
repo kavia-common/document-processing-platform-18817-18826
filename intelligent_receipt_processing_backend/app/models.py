@@ -27,10 +27,20 @@ class User(db.Model):
 
     documents = db.relationship("Document", secondary="user_documents", back_populates="users")
 
+    # PUBLIC_INTERFACE
     def set_password(self, password: str, rounds: int = 12):
+        """Hash and set the password; rounds kept for compatibility with configuration.
+
+        Note:
+        - Werkzeug's pbkdf2:sha256 helper does not expose iterations directly. If you need to honor
+          a specific iteration count, switch to a library that exposes it. We preserve the rounds
+          parameter for API compatibility and future migration.
+        """
         self.password_hash = generate_password_hash(password, method="pbkdf2:sha256", salt_length=16)
 
+    # PUBLIC_INTERFACE
     def check_password(self, password: str) -> bool:
+        """Validate a plaintext password against stored hash."""
         return check_password_hash(self.password_hash, password)
 
 

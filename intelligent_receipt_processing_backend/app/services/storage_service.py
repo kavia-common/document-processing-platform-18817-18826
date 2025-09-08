@@ -23,7 +23,17 @@ class StorageService:
 
     # PUBLIC_INTERFACE
     def save_new_version(self, user_id: int, document_id: int, filename: str, file_stream) -> Tuple[str, int, str]:
-        """Save a new file version for a document. Returns (rel_path, size_bytes, checksum)."""
+        """Save a new file version for a document.
+
+        Parameters:
+        - user_id: Owner user id.
+        - document_id: Document id to which this version belongs.
+        - filename: Original filename provided by the client.
+        - file_stream: Binary stream of the file.
+
+        Returns:
+        - tuple(relative_path: str, size_bytes: int, checksum: str)
+        """
         now = datetime.utcnow().strftime("%Y%m%d%H%M%S")
         base_dir = self._doc_dir(user_id, document_id)
         safe_name = f"{now}__{os.path.basename(filename)}"
@@ -37,5 +47,12 @@ class StorageService:
 
     # PUBLIC_INTERFACE
     def get_absolute_path(self, relative_path: str) -> str:
-        """Return absolute on-disk path for a stored file relative path."""
+        """Return absolute on-disk path for a stored file relative path.
+
+        Parameters:
+        - relative_path: Path relative to STORAGE_ROOT returned by save_new_version.
+
+        Returns:
+        - str: Absolute filesystem path.
+        """
         return os.path.join(self.root, relative_path)

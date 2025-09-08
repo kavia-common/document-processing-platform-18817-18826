@@ -17,7 +17,15 @@ class JobService:
 
     # PUBLIC_INTERFACE
     def run_job(self, job_id: int):
-        """Run a job by id; updates DB with results."""
+        """Run a job by id; updates DB with results.
+
+        Parameters:
+        - job_id: ID of the ProcessingJob to execute.
+
+        Side effects:
+        - Updates ProcessingJob status/timestamps and associated DocumentVersion OCR fields.
+        - May update Document category via CategorizationService.
+        """
         job = db.session.get(ProcessingJob, job_id)
         if not job:
             return

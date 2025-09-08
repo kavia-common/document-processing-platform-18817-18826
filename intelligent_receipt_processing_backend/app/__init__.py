@@ -47,3 +47,6 @@ api.register_blueprint(documents_blp)
 api.register_blueprint(search_blp)
 api.register_blueprint(jobs_blp)
 api.register_blueprint(admin_blp)
+
+# PUBLIC_INTERFACE
+__all__ = ["app", "api"]
