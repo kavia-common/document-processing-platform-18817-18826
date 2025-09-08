@@ -17,6 +17,11 @@ app.url_map.strict_slashes = False
 # Load config
 app.config.from_object(get_config())
 
+# Ensure a valid SQLAlchemy URI. Config may set empty string if MYSQL_SQLALCHEMY_URL is not provided.
+# setdefault won't override an existing empty string, so explicitly fix here.
+if not app.config.get("SQLALCHEMY_DATABASE_URI"):
+    app.config["SQLALCHEMY_DATABASE_URI"] = "sqlite:///local.db"  # safe dev fallback
+
 # CORS
 CORS(app, resources={r"/*": {"origins": app.config.get("CORS_ORIGINS", "*")}})
 
@@ -31,7 +36,6 @@ api = Api(app, spec_kwargs={"tags": [
 ]})
 
 # Database
-app.config.setdefault("SQLALCHEMY_DATABASE_URI", "sqlite:///local.db")  # fallback for dev
 db.init_app(app)
 with app.app_context():
     db.create_all()
