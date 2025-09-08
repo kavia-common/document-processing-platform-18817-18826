@@ -18,6 +18,14 @@ Run locally:
 4. FLASK_ENV=development PORT=3001 python intelligent_receipt_processing_backend/run.py
 5. Open http://localhost:3001/docs
 
+Production run (Gunicorn):
+- From the intelligent_receipt_processing_backend directory:
+  - Ensure env vars are set (see .env.example). Do NOT hardcode secrets in code.
+  - Run Gunicorn binding to 0.0.0.0:3001 with 4 workers and a threaded worker class:
+    PORT=3001 gunicorn -b 0.0.0.0:${PORT} -w 4 --threads 2 "app:app"
+  - You can tune workers/threads based on CPU and workload.
+  - Open http://localhost:3001/docs
+
 Environment variables (see .env.example):
 - APP_SECRET_KEY
 - MYSQL_SQLALCHEMY_URL
